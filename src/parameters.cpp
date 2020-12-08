@@ -78,7 +78,7 @@ Parameters::Parameters(std::string fileName) {
   trailingLim = getDouble(getParameter("TrailingSpreadLim", configFile));
   trailingCount = getUnsigned(getParameter("TrailingSpreadCount", configFile));
   orderBookFactor = getDouble(getParameter("OrderBookFactor", configFile));
-  demoMode = getBool(getParameter("DemoMode", configFile));
+  isDemoMode = getBool(getParameter("DemoMode", configFile));
   leg1 = getParameter("Leg1", configFile);
   leg2 = getParameter("Leg2", configFile);
   verbose = getBool(getParameter("Verbose", configFile));
@@ -116,10 +116,10 @@ Parameters::Parameters(std::string fileName) {
   itbitSecret = getParameter("ItBitSecretKey", configFile);
   itbitFees = getDouble(getParameter("ItBitFees", configFile));
   itbitEnable = getBool(getParameter("ItBitEnable", configFile));
-  btceApi = getParameter("BTCeApiKey", configFile);
-  btceSecret = getParameter("BTCeSecretKey", configFile);
-  btceFees = getDouble(getParameter("BTCeFees", configFile));
-  btceEnable = getBool(getParameter("BTCeEnable", configFile));
+  wexApi = getParameter("WEXApiKey", configFile);
+  wexSecret = getParameter("WEXSecretKey", configFile);
+  wexFees = getDouble(getParameter("WEXFees", configFile));
+  wexEnable = getBool(getParameter("WEXEnable", configFile));
   poloniexApi = getParameter("PoloniexApiKey", configFile);
   poloniexSecret = getParameter("PoloniexSecretKey", configFile);
   poloniexFees = getDouble(getParameter("PoloniexFees", configFile));

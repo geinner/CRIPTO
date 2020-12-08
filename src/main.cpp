@@ -12,7 +12,7 @@
 #include "exchanges/kraken.h"
 #include "exchanges/quadrigacx.h"
 #include "exchanges/itbit.h"
-#include "exchanges/btce.h"
+#include "exchanges/wex.h"
 #include "exchanges/poloniex.h"
 #include "exchanges/gdax.h"
 #include "exchanges/exmo.h"
@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
   // Loads all the parameters
   Parameters params("blackbird.conf");
   // Does some verifications about the parameters
-  if (!params.demoMode) {
+  if (!params.isDemoMode) {
     if (!params.useFullExposure) {
       if (params.testedExposure < 10.0 && params.leg2.compare("USD") == 0) {
         // TODO do the same check for other currencies. Is there a limi?
@@ -123,7 +123,7 @@ int main(int argc, char** argv) {
   // Adds the exchange functions to the arrays for all the defined exchanges
   int index = 0;
   if (params.bitfinexEnable &&
-     (params.bitfinexApi.empty() == false || params.demoMode == true)) {
+     (params.bitfinexApi.empty() == false || params.isDemoMode)) {
     params.addExchange("Bitfinex", params.bitfinexFees, true, true);
     getQuote[index] = Bitfinex::getQuote;
     getAvail[index] = Bitfinex::getAvail;
@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
     index++;
   }
   if (params.okcoinEnable &&
-     (params.okcoinApi.empty() == false || params.demoMode == true)) {
+     (params.okcoinApi.empty() == false || params.isDemoMode)) {
     params.addExchange("OKCoin", params.okcoinFees, false, true);
     getQuote[index] = OKCoin::getQuote;
     getAvail[index] = OKCoin::getAvail;
@@ -155,7 +155,7 @@ int main(int argc, char** argv) {
     index++;
   }
   if (params.bitstampEnable &&
-     (params.bitstampClientId.empty() == false || params.demoMode == true)) {
+     (params.bitstampClientId.empty() == false || params.isDemoMode)) {
     params.addExchange("Bitstamp", params.bitstampFees, false, true);
     getQuote[index] = Bitstamp::getQuote;
     getAvail[index] = Bitstamp::getAvail;
@@ -170,7 +170,7 @@ int main(int argc, char** argv) {
     index++;
   }
   if (params.geminiEnable &&
-     (params.geminiApi.empty() == false || params.demoMode == true)) {
+     (params.geminiApi.empty() == false || params.isDemoMode)) {
     params.addExchange("Gemini", params.geminiFees, false, true);
     getQuote[index] = Gemini::getQuote;
     getAvail[index] = Gemini::getAvail;
@@ -185,8 +185,8 @@ int main(int argc, char** argv) {
     index++;
   }
   if (params.krakenEnable &&
-     (params.krakenApi.empty() == false || params.demoMode == true)) {
-    params.addExchange("Kraken", params.krakenFees, true, true);
+     (params.krakenApi.empty() == false || params.isDemoMode)) {
+    params.addExchange("Kraken", params.krakenFees, false, true);
     getQuote[index] = Kraken::getQuote;
     getAvail[index] = Kraken::getAvail;
     sendLongOrder[index] = Kraken::sendLongOrder;
@@ -201,7 +201,7 @@ int main(int argc, char** argv) {
     index++;
   }
   if (params.itbitEnable &&
-     (params.itbitApi.empty() == false || params.demoMode == true)) {
+     (params.itbitApi.empty() == false || params.isDemoMode)) {
     params.addExchange("ItBit", params.itbitFees, false, false);
     getQuote[index] = ItBit::getQuote;
     getAvail[index] = ItBit::getAvail;
@@ -213,24 +213,29 @@ int main(int argc, char** argv) {
 
     index++;
   }
-  if (params.btceEnable &&
-     (params.btceApi.empty() == false || params.demoMode == true)) {
-    params.addExchange("BTC-e", params.btceFees, false, true);
-    getQuote[index] = BTCe::getQuote;
-    getAvail[index] = BTCe::getAvail;
-    sendLongOrder[index] = BTCe::sendLongOrder;
-    isOrderComplete[index] = BTCe::isOrderComplete;
-    getActivePos[index] = BTCe::getActivePos;
-    getLimitPrice[index] = BTCe::getLimitPrice;
+  if (params.wexEnable &&
+     (params.wexApi.empty() == false || params.isDemoMode)) {
+    params.addExchange("WEX", params.wexFees, false, true);
+    getQuote[index] = WEX::getQuote;
+    getAvail[index] = WEX::getAvail;
+    sendLongOrder[index] = WEX::sendLongOrder;
+    isOrderComplete[index] = WEX::isOrderComplete;
+    getActivePos[index] = WEX::getActivePos;
+    getLimitPrice[index] = WEX::getLimitPrice;
 
-    dbTableName[index] = "btce";
+    dbTableName[index] = "wex";
     createTable(dbTableName[index], params);
 
     index++;
   }
   if (params.poloniexEnable &&
+<<<<<<< HEAD
      (params.poloniexApi.empty() == false || params.demoMode == true)) {
     params.addExchange("Poloniex", params.poloniexFees, false, true);
+=======
+     (params.poloniexApi.empty() == false || params.isDemoMode)) {
+    params.addExchange("Poloniex", params.poloniexFees, true, false);
+>>>>>>> origin/master
     getQuote[index] = Poloniex::getQuote;
     getAvail[index] = Poloniex::getAvail;
     sendLongOrder[index] = Poloniex::sendLongOrder;
@@ -245,7 +250,7 @@ int main(int argc, char** argv) {
     index++;
   }
   if (params.gdaxEnable &&
-     (params.gdaxApi.empty() == false || params.demoMode == true)) {
+     (params.gdaxApi.empty() == false || params.isDemoMode)) {
     params.addExchange("GDAX", params.gdaxFees, false, true);
     getQuote[index] = GDAX::getQuote;
     getAvail[index] = GDAX::getAvail;
@@ -259,7 +264,7 @@ int main(int argc, char** argv) {
     index++;
   }
   if (params.quadrigaEnable &&
-         (params.quadrigaApi.empty() == false || params.demoMode == true)) {
+         (params.quadrigaApi.empty() == false || params.isDemoMode)) {
     params.addExchange("QuadrigaCX", params.quadrigaFees, false, true);
     getQuote[index] = QuadrigaCX::getQuote;
     getAvail[index] = QuadrigaCX::getAvail;
@@ -274,7 +279,7 @@ int main(int argc, char** argv) {
     index++;
   }
   if (params.exmoEnable &&
-         (params.exmoApi.empty() == false || params.demoMode == true)) {
+         (params.exmoApi.empty() == false || params.isDemoMode)) {
     params.addExchange("Exmo", params.exmoFees, false, true);
     getQuote[index] = Exmo::getQuote;
     getAvail[index] = Exmo::getAvail;
@@ -289,7 +294,7 @@ int main(int argc, char** argv) {
     index++;
   }
   if (params.cexioEnable &&
-         (params.cexioApi.empty() == false || params.demoMode == true)) {
+         (params.cexioApi.empty() == false || params.isDemoMode)) {
     params.addExchange("Cexio", params.cexioFees, false, true);
     getQuote[index] = Cexio::getQuote;
     getAvail[index] = Cexio::getAvail;
@@ -305,7 +310,7 @@ int main(int argc, char** argv) {
     index++;
   }
   if (params.bittrexEnable &&
-      (params.bittrexApi.empty() == false || params.demoMode == true))
+      (params.bittrexApi.empty() == false || params.isDemoMode))
   {
     params.addExchange("Bittrex", params.bittrexFees, false, true);
     getQuote[index] = Bittrex::getQuote;
@@ -321,7 +326,7 @@ int main(int argc, char** argv) {
     index++;
   }
   if (params.binanceEnable &&
-      (params.binanceApi.empty() == false || params.demoMode == true))
+      (params.binanceApi.empty() == false || params.isDemoMode))
   {
     params.addExchange("Binance", params.binanceFees, false, true);
     getQuote[index] = Binance::getQuote;
@@ -390,7 +395,7 @@ int main(int argc, char** argv) {
 
   logFile << "Connected to database \'" << params.dbFile << "\'\n" << std::endl;
 
-  if (params.demoMode) {
+  if (params.isDemoMode) {
     logFile << "Demo mode: trades won't be generated\n" << std::endl;
   }
 
@@ -435,7 +440,7 @@ int main(int argc, char** argv) {
   // This is only done when not in Demo mode.
   // This is the first curl on exchanges
   std::vector<Balance> balance(numExch);
-  if (!params.demoMode)
+  if (!params.isDemoMode)
     std::transform(getAvail, getAvail + numExch,
                    begin(balance),
                    [&params]( decltype(*getAvail) apply )
@@ -500,7 +505,7 @@ int main(int argc, char** argv) {
   // Writes the current balances into the log file
   for (int i = 0; i < numExch; ++i) {
     logFile << "   " << params.exchName[i] << ":\t";
-    if (params.demoMode) {
+    if (params.isDemoMode) {
       logFile << "n/a (demo mode)" << std::endl;
     } else if (!params.isImplemented[i]) {
       logFile << "n/a (API not implemented)" << std::endl;
@@ -516,7 +521,7 @@ int main(int argc, char** argv) {
   }
   logFile << std::endl;
   logFile << "[ Cash exposure ]\n";
-  if (params.demoMode) {
+  if (params.isDemoMode) {
     logFile << "   No cash - Demo mode\n";
   } else {
     if (params.useFullExposure) {
@@ -635,6 +640,7 @@ int main(int argc, char** argv) {
       }
     }
     // Looks for arbitrage opportunities on all the exchange combinations
+<<<<<<< HEAD
     for (size_t i = 0; i < entryVec.size(); i++)
     {
       if (checkEntry(&btcVec[entryVec[i].idExchLong], &btcVec[entryVec[i].idExchShort], entryVec[i], params))
@@ -673,6 +679,108 @@ int main(int argc, char** argv) {
                     << entryVec[i].exposure << ") above the limit\n"
                     << "         Max exposure will be used instead (" << params.maxExposure << ")" << std::endl;
             entryVec[i].exposure = params.maxExposure;
+=======
+    if (!inMarket) {
+      for (int i = 0; i < numExch; ++i) {
+        for (int j = 0; j < numExch; ++j) {
+          if (i != j) {
+            if (checkEntry(&btcVec[i], &btcVec[j], res, params)) {
+              // An entry opportunity has been found!
+              res.exposure = std::min(balance[res.idExchLong].leg2, balance[res.idExchShort].leg2);
+              if (params.isDemoMode) {
+                logFile << "INFO: Opportunity found but no trade will be generated (Demo mode)" << std::endl;
+                break;
+              }
+              if (res.exposure == 0.0) {
+                logFile << "WARNING: Opportunity found but no cash available. Trade canceled" << std::endl;
+                break;
+              }
+              if (params.useFullExposure == false && res.exposure <= params.testedExposure) {
+                logFile << "WARNING: Opportunity found but no enough cash. Need more than TEST cash (min. $"
+                        << std::setprecision(2) << params.testedExposure << "). Trade canceled" << std::endl;
+                break;
+              }
+              if (params.useFullExposure) {
+                // Removes 1% of the exposure to have
+                // a little bit of margin.
+                res.exposure -= 0.01 * res.exposure;
+                if (res.exposure > params.maxExposure) {
+                  logFile << "WARNING: Opportunity found but exposure ("
+                          << std::setprecision(2)
+                          << res.exposure << ") above the limit\n"
+                          << "         Max exposure will be used instead (" << params.maxExposure << ")" << std::endl;
+                  res.exposure = params.maxExposure;
+                }
+              } else {
+                res.exposure = params.testedExposure;
+              }
+              // Checks the volumes and, based on that, computes the limit prices
+              // that will be sent to the exchanges
+              double volumeLong = res.exposure / btcVec[res.idExchLong].getAsk();
+              double volumeShort = res.exposure / btcVec[res.idExchShort].getBid();
+              double limPriceLong = getLimitPrice[res.idExchLong](params, volumeLong, false);
+              double limPriceShort = getLimitPrice[res.idExchShort](params, volumeShort, true);
+              if (limPriceLong == 0.0 || limPriceShort == 0.0) {
+                logFile << "WARNING: Opportunity found but error with the order books (limit price is null). Trade canceled\n";
+                logFile.precision(2);
+                logFile << "         Long limit price:  " << limPriceLong << std::endl;
+                logFile << "         Short limit price: " << limPriceShort << std::endl;
+                res.trailing[res.idExchLong][res.idExchShort] = -1.0;
+                break;
+              }
+              if (limPriceLong - res.priceLongIn > params.priceDeltaLim || res.priceShortIn - limPriceShort > params.priceDeltaLim) {
+                logFile << "WARNING: Opportunity found but not enough liquidity. Trade canceled\n";
+                logFile.precision(2);
+                logFile << "         Target long price:  " << res.priceLongIn << ", Real long price:  " << limPriceLong << std::endl;
+                logFile << "         Target short price: " << res.priceShortIn << ", Real short price: " << limPriceShort << std::endl;
+                res.trailing[res.idExchLong][res.idExchShort] = -1.0;
+                break;
+              }
+              // We are in market now, meaning we have positions on leg1 (the hedged on)
+              // We store the details of that first trade into the Result structure.
+              inMarket = true;
+              resultId++;
+              res.id = resultId;
+              res.entryTime = currTime;
+              res.priceLongIn = limPriceLong;
+              res.priceShortIn = limPriceShort;
+              res.printEntryInfo(*params.logFile);
+              res.maxSpread[res.idExchLong][res.idExchShort] = -1.0;
+              res.minSpread[res.idExchLong][res.idExchShort] = 1.0;
+              res.trailing[res.idExchLong][res.idExchShort] = 1.0;
+
+              // Send the orders to the two exchanges
+              auto longOrderId = sendLongOrder[res.idExchLong](params, "buy", volumeLong, limPriceLong);
+              auto shortOrderId = sendShortOrder[res.idExchShort](params, "sell", volumeShort, limPriceShort);
+              logFile << "Waiting for the two orders to be filled..." << std::endl;
+              sleep_for(millisecs(5000));
+              bool isLongOrderComplete = isOrderComplete[res.idExchLong](params, longOrderId);
+              bool isShortOrderComplete = isOrderComplete[res.idExchShort](params, shortOrderId);
+              // Loops until both orders are completed
+              while (!isLongOrderComplete || !isShortOrderComplete) {
+                sleep_for(millisecs(3000));
+                if (!isLongOrderComplete) {
+                  logFile << "Long order on " << params.exchName[res.idExchLong] << " still open..." << std::endl;
+                  isLongOrderComplete = isOrderComplete[res.idExchLong](params, longOrderId);
+                }
+                if (!isShortOrderComplete) {
+                  logFile << "Short order on " << params.exchName[res.idExchShort] << " still open..." << std::endl;
+                  isShortOrderComplete = isOrderComplete[res.idExchShort](params, shortOrderId);
+                }
+              }
+              // Both orders are now fully executed
+              logFile << "Done" << std::endl;
+
+              // Stores the partial result to file in case
+              // the program exits before closing the position.
+              res.savePartialResult("restore.txt");
+
+              // Resets the order ids
+              longOrderId  = "0";
+              shortOrderId = "0";
+              break;
+            }
+>>>>>>> origin/master
           }
         }
         else
